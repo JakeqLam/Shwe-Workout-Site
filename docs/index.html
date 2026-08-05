@@ -1442,7 +1442,7 @@
     /* Saved workout history */
     .saved-workouts-panel {
       overflow: hidden;
-      background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(255,239,247,.92) 52%, rgba(241,238,255,.92));
+      background: linear-gradient(145deg, rgba(255, 255, 255, .97), rgba(255, 239, 247, .92) 52%, rgba(241, 238, 255, .92));
     }
 
     .saved-workouts-heading {
@@ -1470,7 +1470,7 @@
       padding: 12px 14px;
       border: 1px solid #edd0df;
       border-radius: 17px;
-      background: rgba(255,255,255,.72);
+      background: rgba(255, 255, 255, .72);
       text-align: center;
       box-shadow: 0 7px 18px rgba(165, 92, 131, .06);
     }
@@ -1504,7 +1504,7 @@
       padding: 18px;
       border: 1px solid #efcddd;
       border-radius: 21px;
-      background: rgba(255,255,255,.85);
+      background: rgba(255, 255, 255, .85);
       box-shadow: 0 9px 22px rgba(164, 92, 132, .07);
     }
 
@@ -1601,7 +1601,7 @@
       border: 2px dashed #ecc9da;
       border-radius: 20px;
       color: #8a6b7d;
-      background: rgba(255,255,255,.57);
+      background: rgba(255, 255, 255, .57);
       text-align: center;
       font-weight: 700;
     }
@@ -1616,7 +1616,7 @@
       border: 1px solid #edbfd3;
       border-radius: 999px;
       color: #713d56;
-      background: rgba(255,255,255,.96);
+      background: rgba(255, 255, 255, .96);
       box-shadow: 0 16px 38px rgba(154, 84, 124, .19);
       font-weight: 850;
       opacity: 0;
@@ -1631,59 +1631,25 @@
     }
 
     @media (max-width: 780px) {
-      .saved-workouts-heading { display: block; }
-      .workout-stats { margin-top: 14px; min-width: 0; }
-      .saved-workout-grid { grid-template-columns: 1fr; }
+      .saved-workouts-heading {
+        display: block;
+      }
+
+      .workout-stats {
+        margin-top: 14px;
+        min-width: 0;
+      }
+
+      .saved-workout-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 480px) {
-      .workout-stats { grid-template-columns: 1fr; }
+      .workout-stats {
+        grid-template-columns: 1fr;
+      }
     }
-
-
-
-    .storage-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin-top: 10px;
-      padding: 8px 12px;
-      border: 1px solid #e5cbe0;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .78);
-      color: #77546b;
-      font-size: .82rem;
-      font-weight: 800;
-    }
-
-    .storage-status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #d5a253;
-      box-shadow: 0 0 0 4px rgba(213, 162, 83, .13);
-    }
-
-    .storage-status.database .storage-status-dot {
-      background: #72b27b;
-      box-shadow: 0 0 0 4px rgba(114, 178, 123, .14);
-    }
-
-    .storage-status.browser .storage-status-dot {
-      background: #9f8bd9;
-      box-shadow: 0 0 0 4px rgba(159, 139, 217, .14);
-    }
-
-    .storage-status.error .storage-status-dot {
-      background: #d16c81;
-      box-shadow: 0 0 0 4px rgba(209, 108, 129, .14);
-    }
-
-    .storage-status small {
-      color: #96778a;
-      font-weight: 700;
-    }
-
   </style>
 </head>
 
@@ -2058,7 +2024,7 @@
               <h2>Daily symptom and training log</h2>
             </div>
           </div>
-          <p class="subtle">Workouts save to the local SQLite database when the app server is connected.</p>
+          <p class="subtle">Entries stay in this browser using local storage.</p>
         </div>
       </div>
       <article class="card">
@@ -2125,11 +2091,6 @@
             <span class="section-kicker">Your progress journal</span>
             <h2>Saved workouts</h2>
             <p>Each saved session is restored automatically when this page opens.</p>
-            <div class="storage-status" id="storageStatus" role="status" aria-live="polite">
-              <span class="storage-status-dot" aria-hidden="true"></span>
-              <span id="storageStatusText">Connecting to the workout database…</span>
-              <small id="storageStatusDetail"></small>
-            </div>
           </div>
           <div aria-label="Workout summary" class="workout-stats">
             <div class="workout-stat"><strong id="totalWorkoutCount">0</strong><span>Workouts</span></div>
@@ -2187,16 +2148,15 @@
     <div aria-hidden="true" class="dream-footer">
       <span class="sleepy-moon">☾</span><span>☁</span><span>✦</span><span>☆</span><span>☁</span><span>♡</span>
     </div>
-    <p class="footer">Local-first by design. SQLite stores workouts when the local server is running, while browser storage keeps drafts and a local cache.</p>
+    <p class="footer">Built as an offline personal tracker. Saved entries remain only on the current device and browser
+      unless exported.</p>
   </main>
   <div aria-live="polite" class="save-toast" id="saveToast" role="status"></div>
-  <script src="config.js"></script>
   <script>
     const STORAGE_KEY = "plusWorkoutLogsV2";
     const LEGACY_STORAGE_KEY = "tailboneMovementLogsV1";
     const CHECKLIST_KEY = "tailboneChecklistV1";
     const DRAFT_KEY = "plusWorkoutDraftV1";
-    const MIGRATION_KEY = "plusWorkoutDatabaseMigrationV1";
 
     const EXERCISE_LABELS = {
       "easy-walk": "Easy walk or warm-up march",
@@ -2215,11 +2175,6 @@
       "band-walk": "Lateral band walk"
     };
 
-    const config = window.PLUS_TRACKER_CONFIG || {};
-    const API_BASE_URL = String(config.apiBaseUrl || "").replace(/\/$/, "");
-    const isGitHubPages = location.hostname.endsWith("github.io");
-    const shouldTryDatabase = config.useDatabase !== false && (!isGitHubPages || Boolean(API_BASE_URL));
-
     const checks = [...document.querySelectorAll(".exercise-check")];
     const progress = document.getElementById("routineProgress");
     const progressText = document.getElementById("progressText");
@@ -2227,16 +2182,10 @@
     const historyBody = document.getElementById("historyBody");
     const savedWorkoutCards = document.getElementById("savedWorkoutCards");
     const saveToast = document.getElementById("saveToast");
-    const storageStatus = document.getElementById("storageStatus");
-    const storageStatusText = document.getElementById("storageStatusText");
-    const storageStatusDetail = document.getElementById("storageStatusDetail");
     const draftFields = [
       "logDate", "sessionType", "painBefore", "painPeak", "painAfter",
       "painMorning", "sittingMinutes", "squatTarget", "notes"
     ];
-
-    let cachedLogs = [];
-    let storageMode = "loading";
 
     function todayValue() {
       const now = new Date();
@@ -2263,7 +2212,7 @@
       }
     }
 
-    function getBrowserLogs() {
+    function getLogs() {
       const current = parseStoredJson(STORAGE_KEY, null);
       if (Array.isArray(current)) return current;
 
@@ -2275,57 +2224,8 @@
       return [];
     }
 
-    function cacheLogsLocally(logs) {
+    function saveLogs(logs) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-    }
-
-    function getLogs() {
-      return cachedLogs;
-    }
-
-    function apiUrl(path) {
-      return `${API_BASE_URL}${path}`;
-    }
-
-    async function apiRequest(path, options = {}) {
-      const response = await fetch(apiUrl(path), {
-        ...options,
-        headers: {
-          "Content-Type": "application/json",
-          ...(options.headers || {})
-        }
-      });
-
-      if (!response.ok) {
-        let message = `Request failed (${response.status}).`;
-        try {
-          const body = await response.json();
-          if (body?.error) message = body.error;
-        } catch {
-          // Keep the status-based message.
-        }
-        throw new Error(message);
-      }
-
-      if (response.status === 204) return null;
-      return response.json();
-    }
-
-    function updateStorageStatus(mode, detail = "") {
-      storageMode = mode;
-      storageStatus.classList.remove("database", "browser", "error");
-      storageStatus.classList.add(mode === "database" ? "database" : mode === "browser" ? "browser" : "error");
-
-      if (mode === "database") {
-        storageStatusText.textContent = "SQLite database connected";
-        storageStatusDetail.textContent = detail || "Saved on this computer";
-      } else if (mode === "browser") {
-        storageStatusText.textContent = "Browser-only storage";
-        storageStatusDetail.textContent = detail || "Start the local server to use SQLite";
-      } else {
-        storageStatusText.textContent = "Storage connection problem";
-        storageStatusDetail.textContent = detail;
-      }
     }
 
     function showToast(message) {
@@ -2414,14 +2314,6 @@
     function metric(label, value, suffix = "") {
       if (value === "" || value === null || value === undefined) return "";
       return `<span>${safe(label)}: ${safe(value)}${safe(suffix)}</span>`;
-    }
-
-    function sortedLogs(logs = cachedLogs) {
-      return logs.slice().sort((a, b) => {
-        const dateCompare = String(b.date || "").localeCompare(String(a.date || ""));
-        if (dateCompare !== 0) return dateCompare;
-        return String(b.savedAt || b.id || "").localeCompare(String(a.savedAt || a.id || ""));
-      });
     }
 
     function renderSummary(logs) {
@@ -2513,64 +2405,25 @@
     }
 
     function renderHistory() {
-      const logs = sortedLogs();
+      const logs = getLogs().slice().sort((a, b) => {
+        const dateCompare = String(b.date || "").localeCompare(String(a.date || ""));
+        if (dateCompare !== 0) return dateCompare;
+        return String(b.savedAt || b.id || "").localeCompare(String(a.savedAt || a.id || ""));
+      });
       renderSummary(logs);
       renderWorkoutCards(logs);
       renderTable(logs);
     }
 
-    async function initializeStorage() {
-      if (!shouldTryDatabase) {
-        cachedLogs = getBrowserLogs();
-        updateStorageStatus("browser", "GitHub Pages static mode");
-        renderHistory();
-        return;
-      }
-
-      try {
-        cachedLogs = await apiRequest("/api/workouts");
-        updateStorageStatus("database");
-
-        const browserLogs = getBrowserLogs();
-        const alreadyMigrated = localStorage.getItem(MIGRATION_KEY) === "complete";
-        if (!alreadyMigrated && browserLogs.length) {
-          const result = await apiRequest("/api/workouts/import", {
-            method: "POST",
-            body: JSON.stringify({ workouts: browserLogs, mode: "merge" })
-          });
-          cachedLogs = result.workouts;
-          localStorage.setItem(MIGRATION_KEY, "complete");
-          showToast(`${result.imported} browser workout${result.imported === 1 ? "" : "s"} copied into SQLite ♡`);
-        }
-
-        cacheLogsLocally(cachedLogs);
-      } catch (error) {
-        console.warn("SQLite API is unavailable; using browser storage.", error);
-        cachedLogs = getBrowserLogs();
-        updateStorageStatus("browser", error.message);
-      }
-
-      renderHistory();
-    }
-
-    window.deleteLog = async function (id) {
+    window.deleteLog = function (id) {
       const confirmed = confirm("Delete this saved workout?");
       if (!confirmed) return;
-
-      try {
-        if (storageMode === "database") {
-          await apiRequest(`/api/workouts/${encodeURIComponent(id)}`, { method: "DELETE" });
-        }
-        cachedLogs = cachedLogs.filter(log => log.id !== id);
-        cacheLogsLocally(cachedLogs);
-        renderHistory();
-        showToast("Workout deleted");
-      } catch (error) {
-        alert(`The workout could not be deleted: ${error.message}`);
-      }
+      saveLogs(getLogs().filter(log => log.id !== id));
+      renderHistory();
+      showToast("Workout deleted");
     };
 
-    form.addEventListener("submit", async event => {
+    form.addEventListener("submit", event => {
       event.preventDefault();
 
       const completedExercises = checks
@@ -2598,60 +2451,32 @@
         completedExercises
       };
 
-      const submitButton = form.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      submitButton.disabled = true;
-      submitButton.textContent = "Saving…";
+      const logs = getLogs();
+      logs.push(entry);
+      saveLogs(logs);
+      renderHistory();
 
-      try {
-        let saved = entry;
-        if (storageMode === "database") {
-          saved = await apiRequest("/api/workouts", {
-            method: "POST",
-            body: JSON.stringify(entry)
-          });
-        }
-
-        cachedLogs.push(saved);
-        cacheLogsLocally(cachedLogs);
-        renderHistory();
-
-        form.reset();
-        document.getElementById("logDate").value = todayValue();
-        document.getElementById("sessionType").value = "Mobility only";
-        resetChecklist();
-        localStorage.removeItem(DRAFT_KEY);
-        document.getElementById("painBefore").focus();
-        showToast(storageMode === "database" ? "Workout saved to SQLite! ♡" : "Workout saved in this browser ♡");
-      } catch (error) {
-        alert(`The workout could not be saved: ${error.message}`);
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-      }
+      form.reset();
+      document.getElementById("logDate").value = todayValue();
+      document.getElementById("sessionType").value = "Mobility only";
+      resetChecklist();
+      localStorage.removeItem(DRAFT_KEY);
+      document.getElementById("painBefore").focus();
+      showToast("Workout saved! ♡");
     });
 
-    document.getElementById("clearHistory").addEventListener("click", async () => {
-      const confirmed = confirm("Delete every saved workout, the current checklist, and the form draft?");
+    document.getElementById("clearHistory").addEventListener("click", () => {
+      const confirmed = confirm("Delete every saved workout, the current checklist, and the form draft from this browser?");
       if (!confirmed) return;
-
-      try {
-        if (storageMode === "database") {
-          await apiRequest("/api/workouts", { method: "DELETE" });
-        }
-        cachedLogs = [];
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(LEGACY_STORAGE_KEY);
-        localStorage.removeItem(CHECKLIST_KEY);
-        localStorage.removeItem(DRAFT_KEY);
-        form.reset();
-        document.getElementById("logDate").value = todayValue();
-        resetChecklist();
-        renderHistory();
-        showToast("Saved data cleared");
-      } catch (error) {
-        alert(`Saved workouts could not be cleared: ${error.message}`);
-      }
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+      localStorage.removeItem(CHECKLIST_KEY);
+      localStorage.removeItem(DRAFT_KEY);
+      form.reset();
+      document.getElementById("logDate").value = todayValue();
+      resetChecklist();
+      renderHistory();
+      showToast("Saved data cleared");
     });
 
     document.getElementById("exportCsv").addEventListener("click", () => {
@@ -2667,7 +2492,7 @@
         "Completed Exercises", "Notes"
       ];
       const quote = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
-      const rows = sortedLogs(logs).map(log => [
+      const rows = logs.map(log => [
         log.date, log.session, log.before, log.peak, log.after, log.morning,
         log.sitting, log.target, exerciseNames(log).join("; "), log.notes
       ].map(quote).join(","));
@@ -2693,8 +2518,7 @@
 
     document.getElementById("exportBackup").addEventListener("click", () => {
       const backup = {
-        version: 2,
-        storageMode,
+        version: 1,
         exportedAt: new Date().toISOString(),
         workouts: getLogs()
       };
@@ -2722,26 +2546,16 @@
 
         const replace = confirm(
           `This backup contains ${imported.length} workout${imported.length === 1 ? "" : "s"}. ` +
-          "Press OK to replace the current history, or Cancel to keep it unchanged."
+          "Press OK to replace the current history, or Cancel to keep the current history unchanged."
         );
         if (!replace) return;
 
-        if (storageMode === "database") {
-          const result = await apiRequest("/api/workouts/import", {
-            method: "POST",
-            body: JSON.stringify({ workouts: imported, mode: "replace" })
-          });
-          cachedLogs = result.workouts;
-        } else {
-          cachedLogs = imported;
-        }
-
-        cacheLogsLocally(cachedLogs);
+        saveLogs(imported);
         renderHistory();
         showToast("Workout backup restored ♡");
       } catch (error) {
         console.error(error);
-        alert(`That backup could not be restored: ${error.message}`);
+        alert("That file could not be restored. Choose a JSON backup created by this tracker.");
       }
     });
 
@@ -2749,7 +2563,6 @@
     restoreDraft();
     loadChecklist();
     renderHistory();
-    initializeStorage();
   </script>
 </body>
 
