@@ -1437,6 +1437,253 @@
         min-height: auto;
       }
     }
+
+
+    /* Saved workout history */
+    .saved-workouts-panel {
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(255,239,247,.92) 52%, rgba(241,238,255,.92));
+    }
+
+    .saved-workouts-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .saved-workouts-heading p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .workout-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(110px, 1fr));
+      gap: 10px;
+      min-width: min(100%, 390px);
+    }
+
+    .workout-stat {
+      padding: 12px 14px;
+      border: 1px solid #edd0df;
+      border-radius: 17px;
+      background: rgba(255,255,255,.72);
+      text-align: center;
+      box-shadow: 0 7px 18px rgba(165, 92, 131, .06);
+    }
+
+    .workout-stat strong {
+      display: block;
+      color: #a2436d;
+      font-size: 1.35rem;
+      line-height: 1.1;
+    }
+
+    .workout-stat span {
+      display: block;
+      margin-top: 3px;
+      color: #8a6c7c;
+      font-size: .74rem;
+      font-weight: 850;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .saved-workout-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .saved-workout-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      border: 1px solid #efcddd;
+      border-radius: 21px;
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 9px 22px rgba(164, 92, 132, .07);
+    }
+
+    .saved-workout-card::after {
+      content: "✦";
+      position: absolute;
+      right: 16px;
+      bottom: 10px;
+      color: #ead0ef;
+      font-size: 2rem;
+      pointer-events: none;
+    }
+
+    .saved-workout-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .saved-workout-date {
+      color: #6b3b54;
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .saved-workout-session {
+      display: inline-flex;
+      margin-top: 5px;
+      padding: 5px 9px;
+      color: #7b548d;
+      background: #f3ebff;
+      border: 1px solid #ded0f4;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 850;
+    }
+
+    .saved-workout-delete {
+      padding: 7px 10px;
+      color: #ad5168;
+      background: #fff2f5;
+      border: 1px solid #efc7d1;
+      box-shadow: none;
+      font-size: .76rem;
+    }
+
+    .saved-workout-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 14px 0 10px;
+    }
+
+    .saved-workout-metrics span {
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: #765165;
+      background: #fff4f8;
+      border: 1px solid #f1d4e0;
+      font-size: .76rem;
+      font-weight: 800;
+    }
+
+    .saved-exercise-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .saved-exercise-list span {
+      padding: 6px 9px;
+      color: #536985;
+      background: #edf6ff;
+      border: 1px solid #cee2f4;
+      border-radius: 999px;
+      font-size: .74rem;
+      font-weight: 750;
+    }
+
+    .saved-workout-notes {
+      margin: 12px 0 0;
+      padding-top: 11px;
+      border-top: 1px dashed #eccfdd;
+      color: #755c6a;
+      font-size: .88rem;
+      white-space: pre-wrap;
+    }
+
+    .saved-empty {
+      grid-column: 1 / -1;
+      padding: 34px 20px;
+      border: 2px dashed #ecc9da;
+      border-radius: 20px;
+      color: #8a6b7d;
+      background: rgba(255,255,255,.57);
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .save-toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 100;
+      max-width: min(360px, calc(100% - 28px));
+      padding: 13px 18px;
+      border: 1px solid #edbfd3;
+      border-radius: 999px;
+      color: #713d56;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 16px 38px rgba(154, 84, 124, .19);
+      font-weight: 850;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .save-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 780px) {
+      .saved-workouts-heading { display: block; }
+      .workout-stats { margin-top: 14px; min-width: 0; }
+      .saved-workout-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .workout-stats { grid-template-columns: 1fr; }
+    }
+
+
+
+    .storage-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: 1px solid #e5cbe0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      color: #77546b;
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    .storage-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d5a253;
+      box-shadow: 0 0 0 4px rgba(213, 162, 83, .13);
+    }
+
+    .storage-status.database .storage-status-dot {
+      background: #72b27b;
+      box-shadow: 0 0 0 4px rgba(114, 178, 123, .14);
+    }
+
+    .storage-status.browser .storage-status-dot {
+      background: #9f8bd9;
+      box-shadow: 0 0 0 4px rgba(159, 139, 217, .14);
+    }
+
+    .storage-status.error .storage-status-dot {
+      background: #d16c81;
+      box-shadow: 0 0 0 4px rgba(209, 108, 129, .14);
+    }
+
+    .storage-status small {
+      color: #96778a;
+      font-weight: 700;
+    }
+
   </style>
 </head>
 
@@ -1551,35 +1798,6 @@
       </div>
     </header>
 
-    <section id="safety">
-      <div class="section-title">
-        <div>
-          <div class="title-lockup"><span aria-hidden="true" class="section-icon">✦</span>
-            <div><span class="section-kicker">Listen to your body</span>
-              <h2>Symptom rules</h2>
-            </div>
-          </div>
-          <p class="subtle">Use the next-day response—not pride or squat depth—to guide progression.</p>
-        </div>
-      </div>
-      <div class="grid">
-        <article class="card third traffic green">
-          <h3><span class="dot"></span>Green light</h3>
-          <p>Mild muscular effort or stiffness that settles quickly. Symptoms return to their usual baseline by the
-            following morning.</p>
-        </article>
-        <article class="card third traffic yellow">
-          <h3><span class="dot"></span>Modify</h3>
-          <p>Tailbone pain clearly increases, sitting becomes harder afterward, or symptoms remain elevated the next
-            morning. Reduce depth, load, repetitions, or total exercises.</p>
-        </article>
-        <article class="card third traffic red">
-          <h3><span class="dot"></span>Stop and seek care</h3>
-          <p>New weakness, spreading numbness, saddle numbness, bowel or bladder changes, fever, unexplained night pain,
-            severe positional headache, or rapidly worsening symptoms.</p>
-        </article>
-      </div>
-    </section>
     <section id="mobility">
       <div class="section-title">
         <div>
@@ -1840,7 +2058,7 @@
               <h2>Daily symptom and training log</h2>
             </div>
           </div>
-          <p class="subtle">Entries stay in this browser using local storage.</p>
+          <p class="subtle">Workouts save to the local SQLite database when the app server is connected.</p>
         </div>
       </div>
       <article class="card">
@@ -1890,12 +2108,36 @@
             </div>
           </div>
           <div class="button-row">
-            <button class="primary" type="submit">Save log entry</button>
+            <button class="primary" type="submit">Save workout</button>
             <button class="secondary" id="exportCsv" type="button">Export CSV</button>
+            <button class="secondary" id="exportBackup" type="button">Back up data</button>
+            <button class="secondary" id="importBackupButton" type="button">Restore backup</button>
+            <input accept="application/json,.json" hidden id="importBackupFile" type="file" />
             <button class="secondary" onclick="window.print()" type="button">Print page</button>
             <button class="danger" id="clearHistory" type="button">Clear all saved data</button>
           </div>
         </form>
+      </article>
+      <div style="height:14px"></div>
+      <article class="card saved-workouts-panel">
+        <div class="saved-workouts-heading">
+          <div>
+            <span class="section-kicker">Your progress journal</span>
+            <h2>Saved workouts</h2>
+            <p>Each saved session is restored automatically when this page opens.</p>
+            <div class="storage-status" id="storageStatus" role="status" aria-live="polite">
+              <span class="storage-status-dot" aria-hidden="true"></span>
+              <span id="storageStatusText">Connecting to the workout database…</span>
+              <small id="storageStatusDetail"></small>
+            </div>
+          </div>
+          <div aria-label="Workout summary" class="workout-stats">
+            <div class="workout-stat"><strong id="totalWorkoutCount">0</strong><span>Workouts</span></div>
+            <div class="workout-stat"><strong id="latestWorkoutDate">—</strong><span>Latest</span></div>
+            <div class="workout-stat"><strong id="averagePainChange">—</strong><span>Avg. pain change</span></div>
+          </div>
+        </div>
+        <div aria-live="polite" class="saved-workout-grid" id="savedWorkoutCards"></div>
       </article>
       <div style="height:14px"></div>
       <div class="table-wrap">
@@ -1945,57 +2187,61 @@
     <div aria-hidden="true" class="dream-footer">
       <span class="sleepy-moon">☾</span><span>☁</span><span>✦</span><span>☆</span><span>☁</span><span>♡</span>
     </div>
-    <p class="footer">Built as an offline personal tracker. Saved entries remain only on the current device and browser
-      unless exported.</p>
+    <p class="footer">Local-first by design. SQLite stores workouts when the local server is running, while browser storage keeps drafts and a local cache.</p>
   </main>
+  <div aria-live="polite" class="save-toast" id="saveToast" role="status"></div>
+  <script src="config.js"></script>
   <script>
-    const STORAGE_KEY = "tailboneMovementLogsV1";
+    const STORAGE_KEY = "plusWorkoutLogsV2";
+    const LEGACY_STORAGE_KEY = "tailboneMovementLogsV1";
     const CHECKLIST_KEY = "tailboneChecklistV1";
+    const DRAFT_KEY = "plusWorkoutDraftV1";
+    const MIGRATION_KEY = "plusWorkoutDatabaseMigrationV1";
+
+    const EXERCISE_LABELS = {
+      "easy-walk": "Easy walk or warm-up march",
+      "breathing": "Side-lying 360° breathing",
+      "ankle": "Supported knee-to-wall ankle rocks",
+      "hip-flexor": "Half-kneeling hip-flexor stretch",
+      "hamstring": "Standing hamstring hinge stretch",
+      "adductor": "Quadruped adductor rock-back",
+      "box-squat": "Goblet squat to a high target",
+      "split-squat": "Supported split squat",
+      "step-up": "Low step-up",
+      "rdl": "Romanian deadlift from blocks",
+      "bird-dog": "Bird dog",
+      "carry": "Suitcase carry",
+      "pallof": "Standing Pallof press",
+      "band-walk": "Lateral band walk"
+    };
+
+    const config = window.PLUS_TRACKER_CONFIG || {};
+    const API_BASE_URL = String(config.apiBaseUrl || "").replace(/\/$/, "");
+    const isGitHubPages = location.hostname.endsWith("github.io");
+    const shouldTryDatabase = config.useDatabase !== false && (!isGitHubPages || Boolean(API_BASE_URL));
 
     const checks = [...document.querySelectorAll(".exercise-check")];
     const progress = document.getElementById("routineProgress");
     const progressText = document.getElementById("progressText");
     const form = document.getElementById("logForm");
     const historyBody = document.getElementById("historyBody");
+    const savedWorkoutCards = document.getElementById("savedWorkoutCards");
+    const saveToast = document.getElementById("saveToast");
+    const storageStatus = document.getElementById("storageStatus");
+    const storageStatusText = document.getElementById("storageStatusText");
+    const storageStatusDetail = document.getElementById("storageStatusDetail");
+    const draftFields = [
+      "logDate", "sessionType", "painBefore", "painPeak", "painAfter",
+      "painMorning", "sittingMinutes", "squatTarget", "notes"
+    ];
 
-    document.getElementById("logDate").value = new Date().toISOString().slice(0, 10);
+    let cachedLogs = [];
+    let storageMode = "loading";
 
-    function updateChecklistUI() {
-      const completed = checks.filter(c => c.checked).length;
-      progress.max = checks.length;
-      progress.value = completed;
-      progressText.textContent = `${completed} of ${checks.length} complete`;
-
-      checks.forEach(check => {
-        check.closest(".exercise").classList.toggle("completed", check.checked);
-      });
-
-      const state = {};
-      checks.forEach(check => state[check.dataset.exercise] = check.checked);
-      localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state));
-    }
-
-    function loadChecklist() {
-      const state = JSON.parse(localStorage.getItem(CHECKLIST_KEY) || "{}");
-      checks.forEach(check => {
-        check.checked = Boolean(state[check.dataset.exercise]);
-      });
-      updateChecklistUI();
-    }
-
-    checks.forEach(check => check.addEventListener("change", updateChecklistUI));
-
-    document.getElementById("resetChecklist").addEventListener("click", () => {
-      checks.forEach(check => check.checked = false);
-      updateChecklistUI();
-    });
-
-    function getLogs() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    }
-
-    function saveLogs(logs) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    function todayValue() {
+      const now = new Date();
+      const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+      return localDate.toISOString().slice(0, 10);
     }
 
     function safe(value) {
@@ -2007,8 +2253,243 @@
         .replaceAll("'", "&#039;");
     }
 
-    function renderHistory() {
-      const logs = getLogs().sort((a, b) => b.date.localeCompare(a.date));
+    function parseStoredJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (error) {
+        console.warn(`Could not read ${key} from local storage.`, error);
+        return fallback;
+      }
+    }
+
+    function getBrowserLogs() {
+      const current = parseStoredJson(STORAGE_KEY, null);
+      if (Array.isArray(current)) return current;
+
+      const legacy = parseStoredJson(LEGACY_STORAGE_KEY, []);
+      if (Array.isArray(legacy) && legacy.length) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
+        return legacy;
+      }
+      return [];
+    }
+
+    function cacheLogsLocally(logs) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
+
+    function getLogs() {
+      return cachedLogs;
+    }
+
+    function apiUrl(path) {
+      return `${API_BASE_URL}${path}`;
+    }
+
+    async function apiRequest(path, options = {}) {
+      const response = await fetch(apiUrl(path), {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        }
+      });
+
+      if (!response.ok) {
+        let message = `Request failed (${response.status}).`;
+        try {
+          const body = await response.json();
+          if (body?.error) message = body.error;
+        } catch {
+          // Keep the status-based message.
+        }
+        throw new Error(message);
+      }
+
+      if (response.status === 204) return null;
+      return response.json();
+    }
+
+    function updateStorageStatus(mode, detail = "") {
+      storageMode = mode;
+      storageStatus.classList.remove("database", "browser", "error");
+      storageStatus.classList.add(mode === "database" ? "database" : mode === "browser" ? "browser" : "error");
+
+      if (mode === "database") {
+        storageStatusText.textContent = "SQLite database connected";
+        storageStatusDetail.textContent = detail || "Saved on this computer";
+      } else if (mode === "browser") {
+        storageStatusText.textContent = "Browser-only storage";
+        storageStatusDetail.textContent = detail || "Start the local server to use SQLite";
+      } else {
+        storageStatusText.textContent = "Storage connection problem";
+        storageStatusDetail.textContent = detail;
+      }
+    }
+
+    function showToast(message) {
+      saveToast.textContent = message;
+      saveToast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => saveToast.classList.remove("show"), 2600);
+    }
+
+    function updateChecklistUI() {
+      const completed = checks.filter(check => check.checked).length;
+      progress.max = checks.length;
+      progress.value = completed;
+      progressText.textContent = `${completed} of ${checks.length} complete`;
+
+      checks.forEach(check => {
+        check.closest(".exercise").classList.toggle("completed", check.checked);
+      });
+
+      const state = {};
+      checks.forEach(check => state[check.dataset.exercise] = check.checked);
+      localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state));
+      saveDraft();
+    }
+
+    function loadChecklist() {
+      const state = parseStoredJson(CHECKLIST_KEY, {});
+      checks.forEach(check => {
+        check.checked = Boolean(state[check.dataset.exercise]);
+      });
+      updateChecklistUI();
+    }
+
+    function resetChecklist() {
+      checks.forEach(check => check.checked = false);
+      updateChecklistUI();
+    }
+
+    checks.forEach(check => check.addEventListener("change", updateChecklistUI));
+    document.getElementById("resetChecklist").addEventListener("click", resetChecklist);
+
+    function saveDraft() {
+      const draft = {};
+      draftFields.forEach(id => {
+        const element = document.getElementById(id);
+        draft[id] = element?.value ?? "";
+      });
+      draft.completedExercises = checks
+        .filter(check => check.checked)
+        .map(check => check.dataset.exercise);
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }
+
+    function restoreDraft() {
+      const draft = parseStoredJson(DRAFT_KEY, {});
+      draftFields.forEach(id => {
+        const element = document.getElementById(id);
+        if (!element) return;
+        if (draft[id] !== undefined && draft[id] !== "") element.value = draft[id];
+      });
+
+      if (!document.getElementById("logDate").value) {
+        document.getElementById("logDate").value = todayValue();
+      }
+    }
+
+    draftFields.forEach(id => {
+      document.getElementById(id)?.addEventListener("input", saveDraft);
+      document.getElementById(id)?.addEventListener("change", saveDraft);
+    });
+
+    function formatDate(dateString) {
+      if (!dateString) return "No date";
+      const date = new Date(`${dateString}T12:00:00`);
+      if (Number.isNaN(date.getTime())) return dateString;
+      return new Intl.DateTimeFormat(undefined, {
+        month: "short", day: "numeric", year: "numeric"
+      }).format(date);
+    }
+
+    function exerciseNames(log) {
+      const ids = Array.isArray(log.completedExercises) ? log.completedExercises : [];
+      return ids.map(id => EXERCISE_LABELS[id] || id);
+    }
+
+    function metric(label, value, suffix = "") {
+      if (value === "" || value === null || value === undefined) return "";
+      return `<span>${safe(label)}: ${safe(value)}${safe(suffix)}</span>`;
+    }
+
+    function sortedLogs(logs = cachedLogs) {
+      return logs.slice().sort((a, b) => {
+        const dateCompare = String(b.date || "").localeCompare(String(a.date || ""));
+        if (dateCompare !== 0) return dateCompare;
+        return String(b.savedAt || b.id || "").localeCompare(String(a.savedAt || a.id || ""));
+      });
+    }
+
+    function renderSummary(logs) {
+      document.getElementById("totalWorkoutCount").textContent = logs.length;
+      document.getElementById("latestWorkoutDate").textContent = logs.length
+        ? formatDate(logs[0].date).replace(/,?\s\d{4}$/, "")
+        : "—";
+
+      const painChanges = logs
+        .map(log => {
+          const before = Number(log.before);
+          const after = Number(log.after);
+          return Number.isFinite(before) && Number.isFinite(after) && log.before !== "" && log.after !== ""
+            ? after - before
+            : null;
+        })
+        .filter(value => value !== null);
+
+      if (!painChanges.length) {
+        document.getElementById("averagePainChange").textContent = "—";
+        return;
+      }
+
+      const average = painChanges.reduce((sum, value) => sum + value, 0) / painChanges.length;
+      const rounded = Math.round(average * 10) / 10;
+      document.getElementById("averagePainChange").textContent = `${rounded > 0 ? "+" : ""}${rounded}`;
+    }
+
+    function renderWorkoutCards(logs) {
+      if (!logs.length) {
+        savedWorkoutCards.innerHTML = `
+          <div class="saved-empty">
+            ♡ No saved workouts yet.<br />Complete the exercises, add a few notes, and press <strong>Save workout</strong>.
+          </div>`;
+        return;
+      }
+
+      savedWorkoutCards.innerHTML = logs.map(log => {
+        const names = exerciseNames(log);
+        const chips = names.length
+          ? names.map(name => `<span>${safe(name)}</span>`).join("")
+          : '<span>No exercises checked</span>';
+
+        return `
+          <article class="saved-workout-card">
+            <div class="saved-workout-topline">
+              <div>
+                <div class="saved-workout-date">${safe(formatDate(log.date))}</div>
+                <span class="saved-workout-session">${safe(log.session || "Workout")}</span>
+              </div>
+              <button class="saved-workout-delete" type="button" onclick="deleteLog('${safe(log.id)}')">Delete</button>
+            </div>
+            <div class="saved-workout-metrics">
+              ${metric("Pain before", log.before)}
+              ${metric("Peak", log.peak)}
+              ${metric("2 hr", log.after)}
+              ${metric("Next AM", log.morning)}
+              ${metric("Sitting", log.sitting, " min")}
+              ${metric("Squat target", log.target)}
+            </div>
+            <strong>${names.length} movement${names.length === 1 ? "" : "s"} completed</strong>
+            <div class="saved-exercise-list">${chips}</div>
+            ${log.notes ? `<p class="saved-workout-notes">${safe(log.notes)}</p>` : ""}
+          </article>`;
+      }).join("");
+    }
+
+    function renderTable(logs) {
       if (!logs.length) {
         historyBody.innerHTML = '<tr><td colspan="11" class="empty">No entries yet.</td></tr>';
         return;
@@ -2024,28 +2505,87 @@
           <td>${safe(log.morning)}</td>
           <td>${log.sitting ? safe(log.sitting) + " min" : ""}</td>
           <td>${safe(log.target)}</td>
-          <td>${safe(log.completedCount)}</td>
+          <td>${safe(exerciseNames(log).length)}</td>
           <td>${safe(log.notes)}</td>
-          <td><button class="tiny-button" type="button" onclick="deleteLog('${log.id}')">Delete</button></td>
+          <td><button class="tiny-button" type="button" onclick="deleteLog('${safe(log.id)}')">Delete</button></td>
         </tr>
       `).join("");
     }
 
-    window.deleteLog = function (id) {
-      const logs = getLogs().filter(log => log.id !== id);
-      saveLogs(logs);
+    function renderHistory() {
+      const logs = sortedLogs();
+      renderSummary(logs);
+      renderWorkoutCards(logs);
+      renderTable(logs);
+    }
+
+    async function initializeStorage() {
+      if (!shouldTryDatabase) {
+        cachedLogs = getBrowserLogs();
+        updateStorageStatus("browser", "GitHub Pages static mode");
+        renderHistory();
+        return;
+      }
+
+      try {
+        cachedLogs = await apiRequest("/api/workouts");
+        updateStorageStatus("database");
+
+        const browserLogs = getBrowserLogs();
+        const alreadyMigrated = localStorage.getItem(MIGRATION_KEY) === "complete";
+        if (!alreadyMigrated && browserLogs.length) {
+          const result = await apiRequest("/api/workouts/import", {
+            method: "POST",
+            body: JSON.stringify({ workouts: browserLogs, mode: "merge" })
+          });
+          cachedLogs = result.workouts;
+          localStorage.setItem(MIGRATION_KEY, "complete");
+          showToast(`${result.imported} browser workout${result.imported === 1 ? "" : "s"} copied into SQLite ♡`);
+        }
+
+        cacheLogsLocally(cachedLogs);
+      } catch (error) {
+        console.warn("SQLite API is unavailable; using browser storage.", error);
+        cachedLogs = getBrowserLogs();
+        updateStorageStatus("browser", error.message);
+      }
+
       renderHistory();
+    }
+
+    window.deleteLog = async function (id) {
+      const confirmed = confirm("Delete this saved workout?");
+      if (!confirmed) return;
+
+      try {
+        if (storageMode === "database") {
+          await apiRequest(`/api/workouts/${encodeURIComponent(id)}`, { method: "DELETE" });
+        }
+        cachedLogs = cachedLogs.filter(log => log.id !== id);
+        cacheLogsLocally(cachedLogs);
+        renderHistory();
+        showToast("Workout deleted");
+      } catch (error) {
+        alert(`The workout could not be deleted: ${error.message}`);
+      }
     };
 
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", async event => {
       event.preventDefault();
-      const completedNames = checks
+
+      const completedExercises = checks
         .filter(check => check.checked)
         .map(check => check.dataset.exercise);
 
+      if (!completedExercises.length && !document.getElementById("notes").value.trim()) {
+        const continueSaving = confirm("No exercises are checked. Save this entry anyway?");
+        if (!continueSaving) return;
+      }
+
       const entry = {
-        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-        date: document.getElementById("logDate").value,
+        id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        savedAt: new Date().toISOString(),
+        date: document.getElementById("logDate").value || todayValue(),
         session: document.getElementById("sessionType").value,
         before: document.getElementById("painBefore").value,
         peak: document.getElementById("painPeak").value,
@@ -2054,35 +2594,70 @@
         sitting: document.getElementById("sittingMinutes").value,
         target: document.getElementById("squatTarget").value.trim(),
         notes: document.getElementById("notes").value.trim(),
-        completedCount: `${completedNames.length}/${checks.length}`,
-        completedExercises: completedNames
+        completedCount: `${completedExercises.length}/${checks.length}`,
+        completedExercises
       };
 
-      const logs = getLogs();
-      logs.push(entry);
-      saveLogs(logs);
-      renderHistory();
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = "Saving…";
 
-      form.reset();
-      document.getElementById("logDate").value = new Date().toISOString().slice(0, 10);
-      document.getElementById("sessionType").value = "Mobility only";
-      document.getElementById("painBefore").focus();
+      try {
+        let saved = entry;
+        if (storageMode === "database") {
+          saved = await apiRequest("/api/workouts", {
+            method: "POST",
+            body: JSON.stringify(entry)
+          });
+        }
+
+        cachedLogs.push(saved);
+        cacheLogsLocally(cachedLogs);
+        renderHistory();
+
+        form.reset();
+        document.getElementById("logDate").value = todayValue();
+        document.getElementById("sessionType").value = "Mobility only";
+        resetChecklist();
+        localStorage.removeItem(DRAFT_KEY);
+        document.getElementById("painBefore").focus();
+        showToast(storageMode === "database" ? "Workout saved to SQLite! ♡" : "Workout saved in this browser ♡");
+      } catch (error) {
+        alert(`The workout could not be saved: ${error.message}`);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
     });
 
-    document.getElementById("clearHistory").addEventListener("click", () => {
-      const confirmed = confirm("Delete all saved log entries and checklist progress from this browser?");
+    document.getElementById("clearHistory").addEventListener("click", async () => {
+      const confirmed = confirm("Delete every saved workout, the current checklist, and the form draft?");
       if (!confirmed) return;
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(CHECKLIST_KEY);
-      checks.forEach(check => check.checked = false);
-      updateChecklistUI();
-      renderHistory();
+
+      try {
+        if (storageMode === "database") {
+          await apiRequest("/api/workouts", { method: "DELETE" });
+        }
+        cachedLogs = [];
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        localStorage.removeItem(CHECKLIST_KEY);
+        localStorage.removeItem(DRAFT_KEY);
+        form.reset();
+        document.getElementById("logDate").value = todayValue();
+        resetChecklist();
+        renderHistory();
+        showToast("Saved data cleared");
+      } catch (error) {
+        alert(`Saved workouts could not be cleared: ${error.message}`);
+      }
     });
 
     document.getElementById("exportCsv").addEventListener("click", () => {
       const logs = getLogs();
       if (!logs.length) {
-        alert("There are no saved log entries to export.");
+        alert("There are no saved workouts to export.");
         return;
       }
 
@@ -2091,25 +2666,90 @@
         "Pain Next Morning", "Comfortable Sitting Minutes", "Squat Target",
         "Completed Exercises", "Notes"
       ];
-
       const quote = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
-      const rows = logs.map(log => [
+      const rows = sortedLogs(logs).map(log => [
         log.date, log.session, log.before, log.peak, log.after, log.morning,
-        log.sitting, log.target, (log.completedExercises || []).join("; "), log.notes
+        log.sitting, log.target, exerciseNames(log).join("; "), log.notes
       ].map(quote).join(","));
 
-      const csv = [headers.map(quote).join(","), ...rows].join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      downloadFile(
+        "plus-workout-log.csv",
+        [headers.map(quote).join(","), ...rows].join("\n"),
+        "text/csv;charset=utf-8"
+      );
+    });
+
+    function downloadFile(filename, contents, type) {
+      const blob = new Blob([contents], { type });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = "tailbone-movement-log.csv";
+      anchor.download = filename;
+      document.body.appendChild(anchor);
       anchor.click();
+      anchor.remove();
       URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("exportBackup").addEventListener("click", () => {
+      const backup = {
+        version: 2,
+        storageMode,
+        exportedAt: new Date().toISOString(),
+        workouts: getLogs()
+      };
+      downloadFile(
+        `plus-workout-backup-${todayValue()}.json`,
+        JSON.stringify(backup, null, 2),
+        "application/json;charset=utf-8"
+      );
+      showToast("Backup downloaded");
     });
 
+    document.getElementById("importBackupButton").addEventListener("click", () => {
+      document.getElementById("importBackupFile").click();
+    });
+
+    document.getElementById("importBackupFile").addEventListener("change", async event => {
+      const file = event.target.files?.[0];
+      event.target.value = "";
+      if (!file) return;
+
+      try {
+        const parsed = JSON.parse(await file.text());
+        const imported = Array.isArray(parsed) ? parsed : parsed.workouts;
+        if (!Array.isArray(imported)) throw new Error("Backup does not contain a workouts array.");
+
+        const replace = confirm(
+          `This backup contains ${imported.length} workout${imported.length === 1 ? "" : "s"}. ` +
+          "Press OK to replace the current history, or Cancel to keep it unchanged."
+        );
+        if (!replace) return;
+
+        if (storageMode === "database") {
+          const result = await apiRequest("/api/workouts/import", {
+            method: "POST",
+            body: JSON.stringify({ workouts: imported, mode: "replace" })
+          });
+          cachedLogs = result.workouts;
+        } else {
+          cachedLogs = imported;
+        }
+
+        cacheLogsLocally(cachedLogs);
+        renderHistory();
+        showToast("Workout backup restored ♡");
+      } catch (error) {
+        console.error(error);
+        alert(`That backup could not be restored: ${error.message}`);
+      }
+    });
+
+    document.getElementById("logDate").value = todayValue();
+    restoreDraft();
     loadChecklist();
     renderHistory();
+    initializeStorage();
   </script>
 </body>
 
