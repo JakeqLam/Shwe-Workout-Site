@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="#fff1f7" name="theme-color" />
+  <title>Plu's Workout Tracker</title>
+  <style>
+    :root {
+      --ink: #172126;
+      --muted: #59666c;
+      --paper: #f5f6f1;
+      --card: #ffffff;
+      --primary: #183b3b;
+      --primary-soft: #e2efeb;
+      --accent: #d77b4a;
+      --border: #d8ddd8;
+      --green: #276749;
+      --yellow: #8a5b13;
+      --red: #a12b2b;
+      --shadow: 0 8px 28px rgba(23, 33, 38, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(215, 123, 74, .10), transparent 30rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1080px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #183b3b, #245a58);
+      color: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    header p {
+      max-width: 760px;
+      margin: 0;
+      color: rgba(255, 255, 255, .86);
+      font-size: 1.05rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .92rem;
+    }
+
+    .notice {
+      margin-top: 18px;
+      background: #fff8ef;
+      border: 1px solid #efd1b3;
+      border-left: 5px solid var(--accent);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .notice strong {
+      color: #753b1f;
+    }
+
+    section {
+      margin-top: 28px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 4vw, 2rem);
+      letter-spacing: -0.025em;
+    }
+
+    h3 {
+      margin: 0;
+    }
+
+    .subtle {
+      color: var(--muted);
+      margin: 4px 0 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 4px 18px rgba(23, 33, 38, .045);
+    }
+
+    .third {
+      grid-column: span 4;
+    }
+
+    .half {
+      grid-column: span 6;
+    }
+
+    .traffic {
+      border-top: 5px solid;
+    }
+
+    .traffic.green {
+      border-color: var(--green);
+    }
+
+    .traffic.yellow {
+      border-color: #d49b31;
+    }
+
+    .traffic.red {
+      border-color: var(--red);
+    }
+
+    .traffic h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .green .dot {
+      background: var(--green);
+    }
+
+    .yellow .dot {
+      background: #d49b31;
+    }
+
+    .red .dot {
+      background: var(--red);
+    }
+
+    .routine-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-weight: 700;
+      font-size: .77rem;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .exercise {
+      position: relative;
+      padding-left: 54px;
+      min-height: 110px;
+    }
+
+    .exercise-check {
+      position: absolute;
+      left: 18px;
+      top: 21px;
+      width: 24px;
+      height: 24px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .exercise h3 {
+      font-size: 1.12rem;
+      margin-right: 80px;
+    }
+
+    .dose {
+      color: var(--primary);
+      font-weight: 750;
+      margin: 3px 0 8px;
+    }
+
+    .cue-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .cue-list li+li {
+      margin-top: 4px;
+    }
+
+    details {
+      margin-top: 10px;
+      border-top: 1px dashed var(--border);
+      padding-top: 9px;
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .completed {
+      opacity: .62;
+      background: #eef4f1;
+    }
+
+    .completed h3 {
+      text-decoration: line-through;
+    }
+
+    .squat-guide {
+      background: linear-gradient(135deg, #fff, #edf5f2);
+    }
+
+    .depth-line {
+      margin: 16px 0;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green) 0 60%, #d49b31 60% 82%, var(--red) 82% 100%);
+      position: relative;
+    }
+
+    .depth-line::after {
+      content: "Train here";
+      position: absolute;
+      left: 53%;
+      top: 18px;
+      transform: translateX(-50%);
+      color: var(--green);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: .9rem;
+      margin-bottom: 5px;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid #bcc6c3;
+      background: white;
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .field.wide {
+      grid-column: span 4;
+    }
+
+    .field.two {
+      grid-column: span 2;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .secondary {
+      background: #e8ece9;
+      color: var(--ink);
+    }
+
+    .danger {
+      background: #fae8e8;
+      color: #8b2424;
+    }
+
+    .button-row button:hover {
+      filter: brightness(.97);
+    }
+
+    .progress-box {
+      background: #eaf3ef;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .progress-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      font-weight: 750;
+    }
+
+    progress {
+      width: 100%;
+      height: 14px;
+      accent-color: var(--primary);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: .9rem;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef1ee;
+      color: #354247;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px;
+    }
+
+    .tiny-button {
+      padding: 5px 8px;
+      font-size: .78rem;
+      background: #fae8e8;
+      color: #8b2424;
+    }
+
+    .plan {
+      border-left: 5px solid var(--primary);
+    }
+
+    .plan ol {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    .plan li+li {
+      margin-top: 6px;
+    }
+
+    .sources a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 34px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    @media (max-width: 780px) {
+      header {
+        padding: 24px 20px;
+        border-radius: 18px;
+      }
+
+      .third,
+      .half {
+        grid-column: span 12;
+      }
+
+      .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .field.wide {
+        grid-column: span 2;
+      }
+
+      .field.two {
+        grid-column: span 2;
+      }
+
+      .exercise h3 {
+        margin-right: 0;
+      }
+
+      .section-title {
+        display: block;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .shell {
+        width: 100%;
+        padding: 0;
+      }
+
+      header {
+        box-shadow: none;
+      }
+
+      .nav,
+      .button-row,
+      .tiny-button {
+        display: none !important;
+      }
+
+      .card {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      section {
+        break-inside: avoid;
+      }
+    }
+
+
+    /* Kawaii Japanese-inspired visual refresh */
+    :root {
+      --ink: #563548;
+      --muted: #7f6474;
+      --paper: #fff8fb;
+      --card: rgba(255, 255, 255, .92);
+      --primary: #d85f8d;
+      --primary-deep: #9e3f67;
+      --primary-soft: #ffe9f1;
+      --accent: #ff9c72;
+      --border: #f2cfde;
+      --green: #74a95f;
+      --yellow: #c98a35;
+      --red: #c45772;
+      --lavender: #a88de8;
+      --blue: #71b9e5;
+      --shadow: 0 18px 42px rgba(164, 101, 137, .13);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255, 204, 226, .52), transparent 22rem),
+        radial-gradient(circle at 92% 16%, rgba(221, 211, 255, .48), transparent 25rem),
+        radial-gradient(circle at 48% 80%, rgba(255, 229, 192, .45), transparent 30rem),
+        linear-gradient(180deg, #fffafd 0%, #fff8fb 48%, #faf7ff 100%);
+      font-family: "Avenir Next", "Hiragino Sans", "Yu Gothic", "Segoe UI", system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      z-index: -1;
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+
+    body::before {
+      width: 260px;
+      height: 260px;
+      left: -90px;
+      top: 38%;
+      background: rgba(255, 218, 232, .36);
+    }
+
+    body::after {
+      width: 310px;
+      height: 310px;
+      right: -130px;
+      bottom: 7%;
+      background: rgba(213, 225, 255, .35);
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 24px));
+      padding-top: 14px;
+    }
+
+    .app-topbar {
+      min-height: 72px;
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 12px 20px;
+      border: 1px solid rgba(239, 176, 205, .72);
+      border-bottom: 0;
+      border-radius: 28px 28px 0 0;
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 38px rgba(164, 101, 137, .08);
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .window-dots span {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+    }
+
+    .window-dots span:nth-child(1) {
+      background: #ff8ca7;
+    }
+
+    .window-dots span:nth-child(2) {
+      background: #ffd271;
+    }
+
+    .window-dots span:nth-child(3) {
+      background: #8dd991;
+    }
+
+    .mini-brand {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary-deep);
+      text-decoration: none;
+      font-weight: 850;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+
+    .mini-brand-mascot {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50% 50% 44% 44%;
+      color: white;
+      background: linear-gradient(145deg, #ff9fbd, #de75ad);
+      box-shadow: inset 0 -4px 0 rgba(133, 58, 98, .11);
+      font-size: 1.2rem;
+    }
+
+    .topbar-note {
+      color: #a26b87;
+      font-size: .86rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    header {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+      gap: 18px;
+      overflow: hidden;
+      color: var(--ink);
+      border: 1px solid rgba(239, 176, 205, .72);
+      border-radius: 0 0 32px 32px;
+      padding: 42px 42px 36px;
+      background:
+        radial-gradient(circle at 83% 17%, rgba(255, 255, 255, .92) 0 2px, transparent 3px),
+        radial-gradient(circle at 72% 31%, rgba(255, 255, 255, .85) 0 2px, transparent 3px),
+        linear-gradient(130deg, #ffe4ee 0%, #fff0da 44%, #f5ddff 100%);
+      box-shadow: var(--shadow);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .38;
+      background-image:
+        radial-gradient(circle at 15% 22%, #fff 0 2px, transparent 3px),
+        radial-gradient(circle at 26% 76%, #fff 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 62% 14%, #fff 0 2px, transparent 3px),
+        radial-gradient(circle at 92% 73%, #fff 0 2px, transparent 3px);
+      background-size: 110px 110px, 150px 150px, 130px 130px, 170px 170px;
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      align-self: center;
+    }
+
+    header h1 {
+      color: #6a334b;
+      font-size: clamp(2.5rem, 5vw, 4.65rem);
+      max-width: 760px;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+      text-shadow: 0 3px 0 rgba(255, 255, 255, .72);
+    }
+
+    header p {
+      color: #765267;
+      max-width: 690px;
+      font-size: clamp(1rem, 1.7vw, 1.17rem);
+      font-weight: 600;
+    }
+
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .hero-chips span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 13px;
+      border: 1px solid rgba(229, 146, 183, .43);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .7);
+      box-shadow: 0 8px 20px rgba(186, 111, 145, .08);
+      color: #75415b;
+      font-size: .89rem;
+      font-weight: 800;
+    }
+
+    .hero-chips b {
+      color: #ef6e9d;
+      font-size: 1rem;
+    }
+
+    .nav {
+      margin-top: 23px;
+      gap: 9px;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      color: #874b68;
+      background: rgba(255, 255, 255, .73);
+      border: 1px solid rgba(229, 146, 183, .46);
+      box-shadow: 0 7px 16px rgba(165, 90, 130, .07);
+      padding: 9px 13px;
+      font-weight: 800;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .nav a:hover {
+      transform: translateY(-2px);
+      background: #fff;
+      box-shadow: 0 10px 22px rgba(165, 90, 130, .13);
+    }
+
+    .hero-art {
+      position: relative;
+      z-index: 1;
+      min-height: 330px;
+      align-self: end;
+    }
+
+    .mascot-scene {
+      position: absolute;
+      width: min(100%, 525px);
+      right: -14px;
+      bottom: -34px;
+      overflow: visible;
+    }
+
+    .hero-star,
+    .hero-moon {
+      position: absolute;
+      color: #fff2a6;
+      text-shadow: 0 2px 0 #f4ad95;
+      animation: floaty 4.5s ease-in-out infinite;
+      font-size: 2rem;
+      z-index: 2;
+    }
+
+    .star-a {
+      left: 10%;
+      top: 10%;
+    }
+
+    .star-b {
+      right: 13%;
+      top: 5%;
+      animation-delay: -1s;
+    }
+
+    .star-c {
+      left: 3%;
+      bottom: 26%;
+      animation-delay: -2s;
+    }
+
+    .hero-moon {
+      right: 1%;
+      top: 22%;
+      color: #fff4a8;
+      font-size: 3.5rem;
+    }
+
+    .soft-cloud {
+      position: absolute;
+      width: 78px;
+      height: 25px;
+      background: rgba(255, 255, 255, .68);
+      border-radius: 999px;
+      filter: drop-shadow(0 8px 10px rgba(162, 116, 151, .09));
+    }
+
+    .soft-cloud::before,
+    .soft-cloud::after {
+      content: "";
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .soft-cloud::before {
+      width: 36px;
+      height: 36px;
+      left: 12px;
+      bottom: 4px;
+    }
+
+    .soft-cloud::after {
+      width: 45px;
+      height: 45px;
+      right: 8px;
+      bottom: 2px;
+    }
+
+    .cloud-a {
+      left: -7%;
+      top: 39%;
+    }
+
+    .cloud-b {
+      right: -7%;
+      bottom: 18%;
+      transform: scale(.78);
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(3deg);
+      }
+    }
+
+    .kawaii-notice {
+      position: relative;
+      overflow: hidden;
+      padding: 18px 64px 18px 20px;
+      color: #745067;
+      background: linear-gradient(115deg, rgba(255, 247, 250, .95), rgba(255, 233, 242, .92));
+      border: 1px solid #f3c5d8;
+      border-left: 0;
+      border-radius: 20px;
+      box-shadow: 0 10px 28px rgba(167, 96, 133, .08);
+    }
+
+    .kawaii-notice::before {
+      content: "Important";
+      display: inline-flex;
+      padding: 5px 11px;
+      margin-right: 8px;
+      margin-bottom: 4px;
+      color: #a23e68;
+      background: #fff;
+      border: 1px solid #efbfd2;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: .82rem;
+      letter-spacing: .02em;
+    }
+
+    .notice-mascot {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.6rem;
+      color: #d5a8e9;
+      filter: drop-shadow(0 5px 0 #fff);
+    }
+
+    section {
+      margin-top: 34px;
+    }
+
+    .section-title {
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .title-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-icon {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #fff, #ffe9f3);
+      border: 1px solid #f1c8d9;
+      box-shadow: 0 8px 18px rgba(169, 93, 133, .08);
+      font-size: 1.35rem;
+    }
+
+    .section-kicker {
+      display: block;
+      margin-bottom: 1px;
+      color: #bc6e95;
+      font-size: .74rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      color: #64364e;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid rgba(233, 190, 209, .82);
+      border-radius: 23px;
+      box-shadow: 0 10px 26px rgba(168, 102, 137, .075);
+      backdrop-filter: blur(8px);
+    }
+
+    .traffic {
+      border-top: 0;
+      min-height: 170px;
+      padding-top: 22px;
+      overflow: hidden;
+    }
+
+    .traffic::after {
+      content: "";
+      position: absolute;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      right: -28px;
+      bottom: -36px;
+      opacity: .34;
+    }
+
+    .traffic.green {
+      background: linear-gradient(145deg, #fbfff7, #eff9e8);
+      border-color: #cee5bd;
+    }
+
+    .traffic.yellow {
+      background: linear-gradient(145deg, #fffdf5, #fff1d9);
+      border-color: #f1d5a8;
+    }
+
+    .traffic.red {
+      background: linear-gradient(145deg, #fff9fb, #ffe7ec);
+      border-color: #efc5d1;
+    }
+
+    .traffic.green::after {
+      background: #b8e2a4;
+    }
+
+    .traffic.yellow::after {
+      background: #ffd88c;
+    }
+
+    .traffic.red::after {
+      background: #ffb8c9;
+    }
+
+    .dot {
+      width: 18px;
+      height: 18px;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .09);
+    }
+
+    .tag {
+      color: #79528d;
+      background: #f3eaff;
+      border: 1px solid #dccaf6;
+      padding: 7px 11px;
+    }
+
+    .exercise {
+      min-height: 226px;
+      padding: 23px 20px 56px 72px;
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .exercise:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px rgba(162, 96, 137, .12);
+    }
+
+    .exercise::after {
+      content: "✦";
+      position: absolute;
+      right: 15px;
+      bottom: 12px;
+      color: rgba(213, 143, 182, .35);
+      font-size: 1.5rem;
+    }
+
+    .exercise-icon {
+      position: absolute;
+      left: 18px;
+      top: 19px;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #9a5480;
+      background: rgba(255, 255, 255, .74);
+      border: 1px solid rgba(226, 171, 201, .68);
+      font-size: 1.2rem;
+      font-weight: 900;
+      box-shadow: 0 7px 15px rgba(156, 89, 126, .07);
+    }
+
+    .exercise-check {
+      left: 23px;
+      top: auto;
+      bottom: 19px;
+      width: 25px;
+      height: 25px;
+      accent-color: #ef6f9f;
+    }
+
+    .exercise h3 {
+      color: #673c55;
+      margin-right: 0;
+      line-height: 1.22;
+    }
+
+    .dose {
+      color: #d35d89;
+    }
+
+    .cue-list {
+      color: #7c6271;
+    }
+
+    details {
+      border-color: rgba(226, 183, 204, .75);
+    }
+
+    summary {
+      color: #ae4d77;
+    }
+
+    .pastel-1 {
+      background: linear-gradient(145deg, rgba(255, 255, 255, .96), rgba(255, 235, 244, .88));
+    }
+
+    .pastel-2 {
+      background: linear-gradient(145deg, rgba(255, 255, 255, .96), rgba(239, 234, 255, .9));
+    }
+
+    .pastel-3 {
+      background: linear-gradient(145deg, rgba(255, 255, 255, .96), rgba(229, 246, 255, .9));
+    }
+
+    .pastel-4 {
+      background: linear-gradient(145deg, rgba(255, 255, 255, .96), rgba(255, 244, 220, .9));
+    }
+
+    .completed {
+      opacity: 1;
+      background: linear-gradient(145deg, #fff, #edf9f0) !important;
+      border-color: #bfe2c6;
+    }
+
+    .completed::before {
+      content: "nice work!";
+      position: absolute;
+      right: 13px;
+      top: 13px;
+      padding: 4px 7px;
+      color: #568965;
+      background: #ecf8ef;
+      border: 1px solid #c8e5ce;
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .completed h3 {
+      text-decoration: none;
+    }
+
+    .progress-box {
+      position: relative;
+      overflow: hidden;
+      min-height: 126px;
+      padding: 22px 22px 20px 104px;
+      background: linear-gradient(115deg, #fff3f8, #f6edff 60%, #eaf7ff);
+      border: 1px solid #efc8dc;
+      box-shadow: 0 12px 28px rgba(166, 92, 133, .1);
+    }
+
+    .progress-friend {
+      position: absolute;
+      left: 24px;
+      top: 23px;
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 43% 57% 52% 48%;
+      background: #fff5ad;
+      border: 4px solid #f8af72;
+      transform: rotate(-7deg);
+      box-shadow: 0 8px 16px rgba(206, 123, 100, .16);
+    }
+
+    .progress-face {
+      font-weight: 900;
+      color: #8b5770;
+      transform: rotate(7deg);
+    }
+
+    .progress-spark {
+      position: absolute;
+      right: -11px;
+      top: -13px;
+      color: #ffd56e;
+      font-size: 1.6rem;
+    }
+
+    .progress-line {
+      color: #884d6a;
+    }
+
+    progress {
+      height: 17px;
+      accent-color: #ed78a5;
+    }
+
+    progress::-webkit-progress-bar {
+      background: rgba(255, 255, 255, .74);
+      border-radius: 999px;
+    }
+
+    progress::-webkit-progress-value {
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff9ebd, #e17dca, #9aa7f4);
+    }
+
+    .squat-guide {
+      overflow: hidden;
+      background: linear-gradient(140deg, #fff, #fff0f5 48%, #f1efff);
+      border-color: #efc7d9;
+    }
+
+    .squat-guide::after {
+      content: "♡";
+      position: absolute;
+      right: 24px;
+      top: 14px;
+      color: #f19ab9;
+      font-size: 4rem;
+      opacity: .18;
+    }
+
+    .depth-line {
+      height: 16px;
+      background: linear-gradient(90deg, #a9d791 0 60%, #ffd087 60% 82%, #f4a2b5 82% 100%);
+      box-shadow: inset 0 2px 3px rgba(95, 65, 80, .08);
+    }
+
+    .depth-line::after {
+      color: #6e9b5f;
+      top: 23px;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    input[type="text"],
+    select,
+    textarea {
+      border: 1px solid #edc6d8;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .88);
+      color: #603b50;
+      box-shadow: inset 0 1px 2px rgba(135, 75, 108, .04);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 3px solid rgba(234, 126, 171, .22);
+      border-color: #e68db1;
+    }
+
+    button {
+      border-radius: 999px;
+      padding: 11px 17px;
+      box-shadow: 0 7px 16px rgba(154, 84, 124, .09);
+      transition: transform .17s ease, filter .17s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: linear-gradient(90deg, #ee719f, #c987df);
+    }
+
+    .secondary {
+      background: #f2ecff;
+      color: #6c4c83;
+      border: 1px solid #dbccf4;
+    }
+
+    .danger {
+      background: #fff0f3;
+      color: #ad5168;
+      border: 1px solid #efc4ce;
+    }
+
+    .plan {
+      border-left: 0;
+      overflow: hidden;
+    }
+
+    .plan::after {
+      content: "✧";
+      position: absolute;
+      right: 18px;
+      top: 12px;
+      color: #e2b2d0;
+      font-size: 2.4rem;
+      opacity: .55;
+    }
+
+    .table-wrap {
+      border-color: #efcada;
+      border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(166, 96, 134, .06);
+    }
+
+    th {
+      background: #fff0f6;
+      color: #75445c;
+    }
+
+    th,
+    td {
+      border-bottom-color: #f4dce6;
+    }
+
+    .sources .card {
+      background: linear-gradient(145deg, #fff, #f5efff);
+    }
+
+    .dream-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 44px;
+      padding: 18px 12px 4px;
+      color: #c796dd;
+      font-size: 1.65rem;
+    }
+
+    .sleepy-moon {
+      color: #ffd385;
+      font-size: 2.4rem;
+    }
+
+    .footer {
+      margin-top: 8px;
+      color: #8d6d83;
+      font-weight: 650;
+    }
+
+    @media (max-width: 920px) {
+      .app-topbar {
+        grid-template-columns: 85px 1fr;
+      }
+
+      .topbar-note {
+        display: none;
+      }
+
+      header {
+        grid-template-columns: 1fr;
+        padding-bottom: 20px;
+      }
+
+      .hero-art {
+        min-height: 265px;
+      }
+
+      .mascot-scene {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        bottom: -42px;
+        width: min(540px, 100%);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(100% - 14px, 1180px);
+      }
+
+      .app-topbar {
+        min-height: 60px;
+        grid-template-columns: 64px 1fr;
+        padding: 10px 13px;
+        border-radius: 20px 20px 0 0;
+      }
+
+      .mini-brand {
+        font-size: .86rem;
+      }
+
+      .mini-brand-mascot {
+        width: 34px;
+        height: 34px;
+      }
+
+      header {
+        padding: 30px 20px 18px;
+        border-radius: 0 0 24px 24px;
+      }
+
+      header h1 {
+        font-size: clamp(2.25rem, 12vw, 3.3rem);
+      }
+
+      .hero-art {
+        min-height: 225px;
+      }
+
+      .mascot-scene {
+        width: 430px;
+        max-width: 118%;
+      }
+
+      .hero-chips {
+        gap: 6px;
+      }
+
+      .hero-chips span {
+        font-size: .78rem;
+        padding: 7px 9px;
+      }
+
+      .nav a {
+        font-size: .78rem;
+        padding: 8px 10px;
+      }
+
+      .kawaii-notice {
+        padding-right: 20px;
+      }
+
+      .notice-mascot {
+        display: none;
+      }
+
+      .section-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+      }
+
+      .exercise {
+        min-height: auto;
+        padding: 20px 17px 58px 66px;
+      }
+
+      .progress-box {
+        padding: 92px 18px 18px;
+      }
+
+      .progress-friend {
+        left: 18px;
+        top: 20px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .app-topbar,
+      .hero-art,
+      .dream-footer {
+        display: none !important;
+      }
+
+      header {
+        display: block;
+        color: var(--ink);
+        background: white;
+        border: 1px solid #ddd;
+      }
+
+      .hero-copy {
+        max-width: none;
+      }
+
+      .exercise {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <div class="app-topbar">
+      <div aria-hidden="true"><span></span><span></span><span></span></div>
+      <a aria-label="Back to top" class="mini-brand" href="#top">
+        <span aria-hidden="true" class="mini-brand-mascot">♡</span>
+        <span>Plu's Workout <br />Workout </span>
+      </a>
+      <div class="topbar-note"><span aria-hidden="true">✦</span> gentle progress, one day at a time</div>
+    </div>
+    <header id="top">
+      <div class="hero-copy">
+        <h1>Plu's Workout Tracker</h1>
+        <p>A mobility and strength routine for chronic tailbone pain, limited lower-body mobility, squat “butt
+          wink,” and a possible side-to-side pelvic or leg-height asymmetry.</p>
+        <div aria-label="Routine goals" class="hero-chips">
+          <span><b>🌸</b>You got this!</span>
+          <span><b>♡</b> Juke believes in Plu</span>
+          <span><b>✦</b>Waddle Waddle! </span>
+        </div>
+
+        <nav aria-label="Page navigation" class="nav">
+          <a href="#safety">Safety</a>
+          <a href="#mobility">Mobility</a>
+          <a href="#strength">Strength</a>
+          <a href="#squat">Squat guide</a>
+          <a href="#log">Daily log</a>
+        </nav>
+      </div>
+      <div aria-hidden="true" class="hero-art">
+        <span class="hero-star star-a">✦</span>
+        <span class="hero-star star-b">☆</span>
+        <span class="hero-star star-c">✧</span>
+        <span class="hero-moon">☾</span>
+        <span class="soft-cloud cloud-a"></span>
+        <span class="soft-cloud cloud-b"></span>
+        <svg aria-label="A cheerful original bunny exercising beside two friendly birds" class="mascot-scene" role="img"
+          viewbox="0 0 520 330">
+          <defs>
+            <lineargradient id="bunnyBody" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#fffefc"></stop>
+              <stop offset="1" stop-color="#ffeef5"></stop>
+            </lineargradient>
+            <lineargradient id="chickBody" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#fff7ae"></stop>
+              <stop offset="1" stop-color="#ffd6a7"></stop>
+            </lineargradient>
+            <filter height="180%" id="softShadow" width="160%" x="-30%" y="-30%">
+              <fedropshadow dx="0" dy="10" flood-color="#c985a7" flood-opacity=".22" stddeviation="10"></fedropshadow>
+            </filter>
+          </defs>
+          <ellipse cx="274" cy="300" fill="#d9cdfa" opacity=".36" rx="190" ry="21"></ellipse>
+          <g filter="url(#softShadow)">
+            <!-- Bunny -->
+            <ellipse cx="222" cy="184" fill="url(#bunnyBody)" rx="88" ry="103" stroke="#f58caf" stroke-width="7">
+            </ellipse>
+            <ellipse cx="180" cy="54" fill="#fffefc" rx="25" ry="76" stroke="#f58caf" stroke-width="7"
+              transform="rotate(-10 180 54)"></ellipse>
+            <ellipse cx="250" cy="52" fill="#fffefc" rx="25" ry="78" stroke="#f58caf" stroke-width="7"
+              transform="rotate(8 250 52)"></ellipse>
+            <ellipse cx="181" cy="58" fill="#ffd6e5" rx="11" ry="52"></ellipse>
+            <ellipse cx="249" cy="56" fill="#ffd6e5" rx="11" ry="53"></ellipse>
+            <path d="M137 108 Q213 83 291 110 L285 139 Q211 119 143 140 Z" fill="#9edcf7" stroke="#6e93dc"
+              stroke-width="5"></path>
+            <path d="M288 111 q28 12 38 31 q-21-8-42-7" fill="#b7a5f7" stroke="#6e93dc" stroke-linecap="round"
+              stroke-width="5"></path>
+            <circle cx="190" cy="174" fill="#53344f" r="8"></circle>
+            <circle cx="247" cy="174" fill="#53344f" r="8"></circle>
+            <circle cx="187" cy="170" fill="#fff" r="2.5"></circle>
+            <circle cx="244" cy="170" fill="#fff" r="2.5"></circle>
+            <path d="M207 194 q12 15 24 0" fill="none" stroke="#f0719b" stroke-linecap="round" stroke-width="6"></path>
+            <circle cx="170" cy="195" fill="#ffb8cb" opacity=".65" r="14"></circle>
+            <circle cx="266" cy="195" fill="#ffb8cb" opacity=".65" r="14"></circle>
+            <path d="M150 215 q-35 6-41 34 q17 13 48-7" fill="#fffefc" stroke="#f58caf" stroke-linecap="round"
+              stroke-width="7"></path>
+            <path d="M288 211 q36 4 44 29 q-12 20-45 5" fill="#fffefc" stroke="#f58caf" stroke-linecap="round"
+              stroke-width="7"></path>
+            <ellipse cx="181" cy="279" fill="#fffefc" rx="35" ry="20" stroke="#f58caf" stroke-width="7"></ellipse>
+            <ellipse cx="257" cy="279" fill="#fffefc" rx="35" ry="20" stroke="#f58caf" stroke-width="7"></ellipse>
+            <!-- Water bottle -->
+            <g transform="rotate(-7 119 221)">
+              <rect fill="#b9ecff" height="103" rx="18" stroke="#5bb7dc" stroke-width="6" width="51" x="91" y="160">
+              </rect>
+              <rect fill="#f9a7c3" height="22" rx="7" stroke="#d76f99" stroke-width="5" width="31" x="101" y="145">
+              </rect>
+              <path d="M107 210 q10-17 20 0 q-10 17-20 0" fill="#ff7fa9"></path>
+            </g>
+            <!-- Chick -->
+            <ellipse cx="374" cy="214" fill="url(#chickBody)" rx="64" ry="72" stroke="#f5a15e" stroke-width="7">
+            </ellipse>
+            <path d="M352 143 q18-26 39 0" fill="#ffe780" stroke="#f5a15e" stroke-linecap="round" stroke-width="7">
+            </path>
+            <circle cx="352" cy="205" fill="#513b50" r="7"></circle>
+            <circle cx="396" cy="205" fill="#513b50" r="7"></circle>
+            <path d="M359 220 q15-13 30 0 q-15 17-30 0" fill="#ff9b6d" stroke="#e57657" stroke-width="4"></path>
+            <circle cx="338" cy="226" fill="#ffb7bd" opacity=".7" r="11"></circle>
+            <circle cx="411" cy="226" fill="#ffb7bd" opacity=".7" r="11"></circle>
+            <path d="M324 223 q-22 9-12 29" fill="none" stroke="#f5a15e" stroke-linecap="round" stroke-width="7"></path>
+            <path d="M425 222 q22 8 12 27" fill="none" stroke="#f5a15e" stroke-linecap="round" stroke-width="7"></path>
+            <!-- Duck -->
+            <ellipse cx="452" cy="235" fill="#fff" rx="45" ry="55" stroke="#cfa7bf" stroke-width="6"></ellipse>
+            <circle cx="440" cy="227" fill="#5d4155" r="5"></circle>
+            <circle cx="466" cy="227" fill="#5d4155" r="5"></circle>
+            <path d="M441 241 q12-11 24 0 q-12 13-24 0" fill="#ffc56d" stroke="#ee9c55" stroke-width="3"></path>
+            <circle cx="430" cy="244" fill="#ffc7d7" opacity=".7" r="8"></circle>
+            <circle cx="475" cy="244" fill="#ffc7d7" opacity=".7" r="8"></circle>
+          </g>
+        </svg>
+      </div>
+    </header>
+
+    <section id="safety">
+      <div class="section-title">
+        <div>
+          <div class="title-lockup"><span aria-hidden="true" class="section-icon">✦</span>
+            <div><span class="section-kicker">Listen to your body</span>
+              <h2>Symptom rules</h2>
+            </div>
+          </div>
+          <p class="subtle">Use the next-day response—not pride or squat depth—to guide progression.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card third traffic green">
+          <h3><span class="dot"></span>Green light</h3>
+          <p>Mild muscular effort or stiffness that settles quickly. Symptoms return to their usual baseline by the
+            following morning.</p>
+        </article>
+        <article class="card third traffic yellow">
+          <h3><span class="dot"></span>Modify</h3>
+          <p>Tailbone pain clearly increases, sitting becomes harder afterward, or symptoms remain elevated the next
+            morning. Reduce depth, load, repetitions, or total exercises.</p>
+        </article>
+        <article class="card third traffic red">
+          <h3><span class="dot"></span>Stop and seek care</h3>
+          <p>New weakness, spreading numbness, saddle numbness, bowel or bladder changes, fever, unexplained night pain,
+            severe positional headache, or rapidly worsening symptoms.</p>
+        </article>
+      </div>
+    </section>
+    <section id="mobility">
+      <div class="section-title">
+        <div>
+          <div class="title-lockup"><span aria-hidden="true" class="section-icon">🌸</span>
+            <div><span class="section-kicker">Daily reset</span>
+              <h2>Daily mobility</h2>
+            </div>
+          </div>
+          <p class="subtle">Most days · about 8–12 minutes · gentle range only</p>
+        </div>
+        <span class="tag">No forced stretching</span>
+      </div>
+      <div class="grid">
+        <article class="card half exercise pastel-1"><span aria-hidden="true" class="exercise-icon">♪</span>
+          <input aria-label="Mark easy walk complete" class="exercise-check" data-exercise="easy-walk"
+            type="checkbox" />
+          <h3>Easy walk or warm-up march</h3>
+          <p class="dose">3–8 minutes</p>
+          <ul class="cue-list">
+            <li>Use an easy pace that loosens the hips without increasing tailbone pain.</li>
+            <li>Keep steps natural; do not consciously force the pelvis level.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-2"><span aria-hidden="true" class="exercise-icon">☁</span>
+          <input aria-label="Mark breathing complete" class="exercise-check" data-exercise="breathing"
+            type="checkbox" />
+          <h3>Side-lying 360° breathing</h3>
+          <p class="dose">5 slow breaths per side</p>
+          <ul class="cue-list">
+            <li>Lie on the side with a pillow supporting the head and knees slightly bent.</li>
+            <li>Let the lower ribs, abdomen, back, and pelvic floor gently expand during the inhale.</li>
+            <li>Exhale without squeezing or performing a Kegel.</li>
+          </ul>
+          <details>
+            <summary>Why this version?</summary>
+            <p>Side-lying avoids direct pressure on the coccyx and encourages relaxation rather than automatically
+              strengthening a possibly overactive pelvic floor.</p>
+          </details>
+        </article>
+        <article class="card half exercise pastel-3"><span aria-hidden="true" class="exercise-icon">↗</span>
+          <input aria-label="Mark ankle mobility complete" class="exercise-check" data-exercise="ankle"
+            type="checkbox" />
+          <h3>Supported knee-to-wall ankle rocks</h3>
+          <p class="dose">1–2 sets × 8 each side</p>
+          <ul class="cue-list">
+            <li>Keep the heel down and guide the knee toward the wall over the middle toes.</li>
+            <li>Move only through a smooth, pain-free range.</li>
+            <li>Limited ankle motion can cause an earlier squat compensation.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-4"><span aria-hidden="true" class="exercise-icon">❀</span>
+          <input aria-label="Mark hip flexor stretch complete" class="exercise-check" data-exercise="hip-flexor"
+            type="checkbox" />
+          <h3>Half-kneeling hip-flexor stretch</h3>
+          <p class="dose">2 × 20–30 seconds each side</p>
+          <ul class="cue-list">
+            <li>Use padding under the knee and hold a stable support.</li>
+            <li>Gently tuck the belt line, then shift forward slightly.</li>
+            <li>Stop before the low back arches or the tailbone becomes painful.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-1"><span aria-hidden="true" class="exercise-icon">⌒</span>
+          <input aria-label="Mark hamstring stretch complete" class="exercise-check" data-exercise="hamstring"
+            type="checkbox" />
+          <h3>Standing hamstring hinge stretch</h3>
+          <p class="dose">2 × 20–30 seconds each side</p>
+          <ul class="cue-list">
+            <li>Place one heel on a low step with the knee softly unlocked.</li>
+            <li>Hinge forward from the hips while keeping the spine long.</li>
+            <li>Do not round the pelvis under to chase a deeper stretch.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-2"><span aria-hidden="true" class="exercise-icon">◇</span>
+          <input aria-label="Mark adductor rock-back complete" class="exercise-check" data-exercise="adductor"
+            type="checkbox" />
+          <h3>Quadruped adductor rock-back</h3>
+          <p class="dose">1–2 sets × 6–8 each side</p>
+          <ul class="cue-list">
+            <li>From hands and knees, extend one leg gently to the side.</li>
+            <li>Rock the hips backward only until the inner thigh stretches.</li>
+            <li>Stop before the pelvis tucks or rotates.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+    <section id="strength">
+      <div class="section-title">
+        <div>
+          <div class="title-lockup"><span aria-hidden="true" class="section-icon">☁</span>
+            <div><span class="section-kicker">Build steady strength</span>
+              <h2>Strength session</h2>
+            </div>
+          </div>
+          <p class="subtle">2–3 nonconsecutive days each week · begin with 2 sets</p>
+        </div>
+        <span class="tag">Leave 3–4 reps in reserve</span>
+      </div>
+      <div class="grid">
+        <article class="card half exercise pastel-3"><span aria-hidden="true" class="exercise-icon">▣</span>
+          <input aria-label="Mark box squat complete" class="exercise-check" data-exercise="box-squat"
+            type="checkbox" />
+          <h3>Goblet squat to a high target</h3>
+          <p class="dose">2–3 sets × 6–10</p>
+          <ul class="cue-list">
+            <li>Choose a target just above the depth where the visible butt wink begins.</li>
+            <li>Lightly touch the target; do not sit heavily onto the tailbone.</li>
+            <li>Use a small heel wedge only if it improves control and comfort.</li>
+          </ul>
+          <details>
+            <summary>Progression</summary>
+            <p>Add repetitions first. Then add a small amount of weight. Lower the target only after the current depth
+              is controlled and the next-day response is stable.</p>
+          </details>
+        </article>
+        <article class="card half exercise pastel-4"><span aria-hidden="true" class="exercise-icon">│</span>
+          <input aria-label="Mark split squat complete" class="exercise-check" data-exercise="split-squat"
+            type="checkbox" />
+          <h3>Supported split squat</h3>
+          <p class="dose">2 sets × 6–8 each side</p>
+          <ul class="cue-list">
+            <li>Hold a rail, rack, or sturdy counter.</li>
+            <li>Start with the more restricted side, then match that range and repetition count on the other side.</li>
+            <li>Stop if the pelvis sharply hikes, twists, or reproduces tailbone pain.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-1"><span aria-hidden="true" class="exercise-icon">▰</span>
+          <input aria-label="Mark step-up complete" class="exercise-check" data-exercise="step-up" type="checkbox" />
+          <h3>Low step-up</h3>
+          <p class="dose">2 sets × 6–10 each side</p>
+          <ul class="cue-list">
+            <li>Use a low step and light hand support.</li>
+            <li>Drive through the whole foot without launching from the trailing leg.</li>
+            <li>Keep the step low enough that the pelvis stays reasonably level.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-2"><span aria-hidden="true" class="exercise-icon">⇣</span>
+          <input aria-label="Mark Romanian deadlift complete" class="exercise-check" data-exercise="rdl"
+            type="checkbox" />
+          <h3>Romanian deadlift from blocks</h3>
+          <p class="dose">2–3 sets × 8–10</p>
+          <ul class="cue-list">
+            <li>Begin with the weight elevated so the starting range is comfortable.</li>
+            <li>Push the hips back with soft knees; stop before the pelvis tucks.</li>
+            <li>Use a dowel, light dumbbells, or kettlebell before heavier loading.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-3"><span aria-hidden="true" class="exercise-icon">✧</span>
+          <input aria-label="Mark bird dog complete" class="exercise-check" data-exercise="bird-dog" type="checkbox" />
+          <h3>Bird dog</h3>
+          <p class="dose">2 sets × 5–8 each side · 3-second hold</p>
+          <ul class="cue-list">
+            <li>Reach long rather than lifting the arm and leg high.</li>
+            <li>Keep the pelvis quiet and breathe normally.</li>
+            <li>Regress to moving one limb at a time if the trunk rotates.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-4"><span aria-hidden="true" class="exercise-icon">▥</span>
+          <input aria-label="Mark suitcase carry complete" class="exercise-check" data-exercise="carry"
+            type="checkbox" />
+          <h3>Suitcase carry</h3>
+          <p class="dose">2 rounds × 20–40 seconds each side</p>
+          <ul class="cue-list">
+            <li>Carry a manageable weight in one hand and walk slowly.</li>
+            <li>Stay tall without leaning away from the weight.</li>
+            <li>Use equal time on both sides unless a clinician specifies otherwise.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-1"><span aria-hidden="true" class="exercise-icon">↔</span>
+          <input aria-label="Mark Pallof press complete" class="exercise-check" data-exercise="pallof"
+            type="checkbox" />
+          <h3>Standing Pallof press</h3>
+          <p class="dose">2 sets × 8–12 each side</p>
+          <ul class="cue-list">
+            <li>Use a resistance band anchored near chest height.</li>
+            <li>Press forward without allowing the trunk or pelvis to rotate.</li>
+            <li>Choose a stance that feels stable rather than forcing both feet into a rigid position.</li>
+          </ul>
+        </article>
+        <article class="card half exercise pastel-2"><span aria-hidden="true" class="exercise-icon">⇆</span>
+          <input aria-label="Mark band walk complete" class="exercise-check" data-exercise="band-walk"
+            type="checkbox" />
+          <h3>Lateral band walk</h3>
+          <p class="dose">2 sets × 8–12 steps each direction</p>
+          <ul class="cue-list">
+            <li>Use a light band and small, controlled steps.</li>
+            <li>Keep the feet mostly forward and avoid swaying side to side.</li>
+            <li>Stop if it increases lateral hip or tailbone pain.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="progress-box">
+        <div aria-hidden="true" class="progress-friend">
+          <span class="progress-face">•ᴗ•</span>
+          <span class="progress-spark">✦</span>
+        </div>
+
+        <div class="progress-line">
+          <span>Today’s checklist</span>
+          <span id="progressText">0 of 14 complete</span>
+        </div>
+        <progress id="routineProgress" max="14" value="0"></progress>
+        <div class="button-row">
+          <button class="secondary" id="resetChecklist" type="button">Reset checklist</button>
+        </div>
+      </div>
+    </section>
+    <section id="squat">
+      <article class="card squat-guide">
+        <div class="title-lockup"><span aria-hidden="true" class="section-icon">♡</span>
+          <div><span class="section-kicker">Depth with control</span>
+            <h2>Squat-depth rule</h2>
+          </div>
+        </div>
+        <p>The goal is not an arbitrary “ass-to-grass” position. The current working depth ends just before the pelvis
+          visibly tucks, the trunk suddenly collapses, weight shifts strongly to one side, or tailbone pain appears.</p>
+        <div aria-hidden="true" class="depth-line"></div>
+        <div style="height: 24px"></div>
+        <ol>
+          <li>Film one unloaded set from the side and one from behind.</li>
+          <li>Identify the first rep depth where the pelvic tuck becomes obvious.</li>
+          <li>Set the box or target slightly above that point.</li>
+          <li>Train the controlled range for several sessions.</li>
+          <li>Progress only when symptoms are stable the following morning.</li>
+        </ol>
+      </article>
+    </section>
+    <section>
+      <div class="grid">
+        <article class="card half plan">
+          <h2>Simple weekly schedule</h2>
+          <ol>
+            <li><strong>Monday:</strong> Mobility + strength</li>
+            <li><strong>Tuesday:</strong> Mobility + comfortable walking</li>
+            <li><strong>Wednesday:</strong> Mobility or rest</li>
+            <li><strong>Thursday:</strong> Mobility + strength</li>
+            <li><strong>Friday:</strong> Mobility + comfortable walking</li>
+            <li><strong>Weekend:</strong> Optional third light session or recovery</li>
+          </ol>
+        </article>
+        <article class="card half plan">
+          <h2>Avoid for now</h2>
+          <ol>
+            <li>Deep loaded squats through a painful or uncontrolled tuck</li>
+            <li>Heavy sitting onto a box or bench</li>
+            <li>Sit-ups or seated machines that press on the coccyx</li>
+            <li>Aggressive hamstring stretching with pelvic rounding</li>
+            <li>Automatic Kegel programs without pelvic-floor assessment</li>
+            <li>Unassessed heel lifts intended to “correct” the higher leg</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+    <section id="log">
+      <div class="section-title">
+        <div>
+          <div class="title-lockup"><span aria-hidden="true" class="section-icon">📝</span>
+            <div><span class="section-kicker">Notice the pattern</span>
+              <h2>Daily symptom and training log</h2>
+            </div>
+          </div>
+          <p class="subtle">Entries stay in this browser using local storage.</p>
+        </div>
+      </div>
+      <article class="card">
+        <form id="logForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="logDate">Date</label>
+              <input id="logDate" required="" type="date" />
+            </div>
+            <div class="field">
+              <label for="sessionType">Session</label>
+              <select id="sessionType">
+                <option>Mobility only</option>
+                <option>Strength + mobility</option>
+                <option>Walking / recovery</option>
+                <option>Rest day</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="painBefore">Pain before (0–10)</label>
+              <input id="painBefore" max="10" min="0" required="" step="0.5" type="number" />
+            </div>
+            <div class="field">
+              <label for="painPeak">Peak during (0–10)</label>
+              <input id="painPeak" max="10" min="0" step="0.5" type="number" />
+            </div>
+            <div class="field">
+              <label for="painAfter">Pain 2 hours after</label>
+              <input id="painAfter" max="10" min="0" step="0.5" type="number" />
+            </div>
+            <div class="field">
+              <label for="painMorning">Next morning</label>
+              <input id="painMorning" max="10" min="0" step="0.5" type="number" />
+            </div>
+            <div class="field">
+              <label for="sittingMinutes">Comfortable sitting (min)</label>
+              <input id="sittingMinutes" min="0" step="1" type="number" />
+            </div>
+            <div class="field">
+              <label for="squatTarget">Squat target / box height</label>
+              <input id="squatTarget" placeholder="e.g., 18-inch bench" type="text" />
+            </div>
+            <div class="field wide">
+              <label for="notes">Notes</label>
+              <textarea id="notes"
+                placeholder="What felt better or worse? Any side-to-side difference? Did sitting tolerance change?"></textarea>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="primary" type="submit">Save log entry</button>
+            <button class="secondary" id="exportCsv" type="button">Export CSV</button>
+            <button class="secondary" onclick="window.print()" type="button">Print page</button>
+            <button class="danger" id="clearHistory" type="button">Clear all saved data</button>
+          </div>
+        </form>
+      </article>
+      <div style="height:14px"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Session</th>
+              <th>Before</th>
+              <th>Peak</th>
+              <th>2 hr</th>
+              <th>Next AM</th>
+              <th>Sitting</th>
+              <th>Squat target</th>
+              <th>Completed</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr>
+              <td class="empty" colspan="11">No entries yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="sources">
+      <article class="card">
+        <h2>Clinical basis and useful references</h2>
+        <p>This tracker combines broadly supported chronic low-back-pain exercise principles with conservative
+          modifications intended to reduce direct coccyx pressure. The exact exercise list and dosage are a starter
+          framework and should be individualized.</p>
+        <ul>
+          <li><a href="https://www.who.int/publications/i/item/9789240081789" rel="noopener" target="_blank">World
+              Health Organization: chronic primary low-back-pain guideline</a></li>
+          <li><a href="https://www.jospt.org/doi/10.2519/jospt.2021.0304" rel="noopener" target="_blank">JOSPT/APTA
+              clinical practice guideline: exercise, trunk activation, and movement-control training</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/27565640/" rel="noopener" target="_blank">Scott et al.:
+              pelvic-floor physical therapy for chronic coccydynia</a></li>
+          <li><a href="https://www.aptapelvichealth.org/info/tailbone-troubles-understanding-and-managing-coccydynia"
+              rel="noopener" target="_blank">APTA Pelvic Health: understanding and managing coccydynia</a></li>
+        </ul>
+      </article>
+    </section>
+
+    <div aria-hidden="true" class="dream-footer">
+      <span class="sleepy-moon">☾</span><span>☁</span><span>✦</span><span>☆</span><span>☁</span><span>♡</span>
+    </div>
+    <p class="footer">Built as an offline personal tracker. Saved entries remain only on the current device and browser
+      unless exported.</p>
+  </main>
+  <script>
+    const STORAGE_KEY = "tailboneMovementLogsV1";
+    const CHECKLIST_KEY = "tailboneChecklistV1";
+
+    const checks = [...document.querySelectorAll(".exercise-check")];
+    const progress = document.getElementById("routineProgress");
+    const progressText = document.getElementById("progressText");
+    const form = document.getElementById("logForm");
+    const historyBody = document.getElementById("historyBody");
+
+    document.getElementById("logDate").value = new Date().toISOString().slice(0, 10);
+
+    function updateChecklistUI() {
+      const completed = checks.filter(c => c.checked).length;
+      progress.max = checks.length;
+      progress.value = completed;
+      progressText.textContent = `${completed} of ${checks.length} complete`;
+
+      checks.forEach(check => {
+        check.closest(".exercise").classList.toggle("completed", check.checked);
+      });
+
+      const state = {};
+      checks.forEach(check => state[check.dataset.exercise] = check.checked);
+      localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state));
+    }
+
+    function loadChecklist() {
+      const state = JSON.parse(localStorage.getItem(CHECKLIST_KEY) || "{}");
+      checks.forEach(check => {
+        check.checked = Boolean(state[check.dataset.exercise]);
+      });
+      updateChecklistUI();
+    }
+
+    checks.forEach(check => check.addEventListener("change", updateChecklistUI));
+
+    document.getElementById("resetChecklist").addEventListener("click", () => {
+      checks.forEach(check => check.checked = false);
+      updateChecklistUI();
+    });
+
+    function getLogs() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+    function saveLogs(logs) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
+
+    function safe(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderHistory() {
+      const logs = getLogs().sort((a, b) => b.date.localeCompare(a.date));
+      if (!logs.length) {
+        historyBody.innerHTML = '<tr><td colspan="11" class="empty">No entries yet.</td></tr>';
+        return;
+      }
+
+      historyBody.innerHTML = logs.map(log => `
+        <tr>
+          <td>${safe(log.date)}</td>
+          <td>${safe(log.session)}</td>
+          <td>${safe(log.before)}</td>
+          <td>${safe(log.peak)}</td>
+          <td>${safe(log.after)}</td>
+          <td>${safe(log.morning)}</td>
+          <td>${log.sitting ? safe(log.sitting) + " min" : ""}</td>
+          <td>${safe(log.target)}</td>
+          <td>${safe(log.completedCount)}</td>
+          <td>${safe(log.notes)}</td>
+          <td><button class="tiny-button" type="button" onclick="deleteLog('${log.id}')">Delete</button></td>
+        </tr>
+      `).join("");
+    }
+
+    window.deleteLog = function (id) {
+      const logs = getLogs().filter(log => log.id !== id);
+      saveLogs(logs);
+      renderHistory();
+    };
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const completedNames = checks
+        .filter(check => check.checked)
+        .map(check => check.dataset.exercise);
+
+      const entry = {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        date: document.getElementById("logDate").value,
+        session: document.getElementById("sessionType").value,
+        before: document.getElementById("painBefore").value,
+        peak: document.getElementById("painPeak").value,
+        after: document.getElementById("painAfter").value,
+        morning: document.getElementById("painMorning").value,
+        sitting: document.getElementById("sittingMinutes").value,
+        target: document.getElementById("squatTarget").value.trim(),
+        notes: document.getElementById("notes").value.trim(),
+        completedCount: `${completedNames.length}/${checks.length}`,
+        completedExercises: completedNames
+      };
+
+      const logs = getLogs();
+      logs.push(entry);
+      saveLogs(logs);
+      renderHistory();
+
+      form.reset();
+      document.getElementById("logDate").value = new Date().toISOString().slice(0, 10);
+      document.getElementById("sessionType").value = "Mobility only";
+      document.getElementById("painBefore").focus();
+    });
+
+    document.getElementById("clearHistory").addEventListener("click", () => {
+      const confirmed = confirm("Delete all saved log entries and checklist progress from this browser?");
+      if (!confirmed) return;
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(CHECKLIST_KEY);
+      checks.forEach(check => check.checked = false);
+      updateChecklistUI();
+      renderHistory();
+    });
+
+    document.getElementById("exportCsv").addEventListener("click", () => {
+      const logs = getLogs();
+      if (!logs.length) {
+        alert("There are no saved log entries to export.");
+        return;
+      }
+
+      const headers = [
+        "Date", "Session", "Pain Before", "Peak During", "Pain 2 Hours After",
+        "Pain Next Morning", "Comfortable Sitting Minutes", "Squat Target",
+        "Completed Exercises", "Notes"
+      ];
+
+      const quote = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
+      const rows = logs.map(log => [
+        log.date, log.session, log.before, log.peak, log.after, log.morning,
+        log.sitting, log.target, (log.completedExercises || []).join("; "), log.notes
+      ].map(quote).join(","));
+
+      const csv = [headers.map(quote).join(","), ...rows].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "tailbone-movement-log.csv";
+      anchor.click();
+      URL.revokeObjectURL(url);
+    });
+
+    loadChecklist();
+    renderHistory();
+  </script>
+</body>
+
+</html>
